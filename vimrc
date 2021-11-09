@@ -84,7 +84,6 @@ function! PackInit() abort
 	call minpac#add('junegunn/fzf.vim')
 	call minpac#add('junegunn/vim-easy-align')
 	call minpac#add('morhetz/gruvbox')
-	call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
 	call minpac#add('mg979/vim-visual-multi')
 	call minpac#add('tpope/vim-commentary')
 	call minpac#add('tpope/vim-fugitive')

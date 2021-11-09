@@ -103,23 +103,6 @@ if [[ "$INSTALL_VIM_PLUGINS" != "no" ]]; then
 	vim -c "autocmd vimenter * echo 'Cleaning vim plugins.' | PackClean | echo 'Installing vim plugins.' | call minpac#update('', {'do': 'qall'})"
 fi
 
-coc_extensions=(
-	coc-calc
-	coc-clangd
-	coc-cmake
-	coc-css
-	coc-html
-	coc-json
-	coc-lists
-	coc-pywrite
-	coc-rust-analyzer
-	coc-snippets
-	coc-xml
-	coc-yaml
-	coc-yank
-)
-vim -c "autocmd vimenter * echo 'Installing vim-coc extensions.' | CocInstall -sync ${coc_extensions[*]} | qall"
-
 # Install zsh-syntax-highlighting.
 if [ ! -d "zsh-syntax-highlighting" ]; then
 	git clone git://github.com/zsh-users/zsh-syntax-highlighting
