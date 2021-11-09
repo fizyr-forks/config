@@ -71,54 +71,6 @@ let g:VM_maps = {}
 let g:VM_maps['Skip Region'] = '<C-x>'
 let g:VM_maps['Remove Last Region'] = '<C-p>'
 
-function! PackInit() abort
-	packadd minpac
-	call minpac#init()
-	call minpac#add('PeterRincker/vim-argumentative')
-	call minpac#add('Shougo/vimproc.vim')
-	call minpac#add('airblade/vim-gitgutter')
-	call minpac#add('bkad/CamelCaseMotion')
-	call minpac#add('easymotion/vim-easymotion')
-	call minpac#add('godlygeek/tabular')
-	call minpac#add('groenewege/vim-less')
-	call minpac#add('junegunn/fzf.vim')
-	call minpac#add('junegunn/vim-easy-align')
-	call minpac#add('morhetz/gruvbox')
-	call minpac#add('mg979/vim-visual-multi')
-	call minpac#add('tpope/vim-commentary')
-	call minpac#add('tpope/vim-fugitive')
-	call minpac#add('tpope/vim-repeat')
-	call minpac#add('tpope/vim-sleuth')
-	call minpac#add('tpope/vim-speeddating')
-	call minpac#add('tpope/vim-surround')
-	call minpac#add('vim-scripts/Rename2')
-	call minpac#add('vim-scripts/The-NERD-tree')
-	call minpac#add('vim-scripts/VisIncr')
-	call minpac#add('vim-scripts/vis')
-	" File type / language support:
-	call minpac#add('vim-scripts/JSON.vim')
-	call minpac#add('vim-scripts/django.vim')
-	call minpac#add('vim-scripts/glsl.vim')
-	call minpac#add('vim-scripts/jade.vim')
-	call minpac#add('vim-scripts/openscad.vim')
-	call minpac#add('vim-pandoc/vim-pandoc-syntax')
-	call minpac#add('cespare/vim-toml')
-	call minpac#add('de-vri-es/vim-urscript')
-	call minpac#add('eagletmt/neco-ghc')
-	call minpac#add('guns/xterm-color-table.vim')
-	call minpac#add('leafgarland/typescript-vim')
-	call minpac#add('lukerandall/haskellmode-vim')
-	call minpac#add('rust-lang/rust.vim')
-	" Plugins added by :Plug
-	for i in g:plug_extra
-		call minpac#add(i)
-	endfor
-endfunction
-
-command! -bar PackUpdate call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
-command! -bar PackClean  call PackInit() | call minpac#clean()
-command! -bar PackStatus call PackInit() | call minpac#status()
-
 nmap <C-p> :Files<CR>
 imap <C-x><C-p> <plug>(fzf-complete-path)
 

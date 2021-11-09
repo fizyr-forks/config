@@ -92,16 +92,76 @@ do
 	install_file "$file" ".$file"
 done
 
-# Install minpac.
-if [ ! -d "vim/pack/minpac/opt/minpac" ]; then
-	git clone --depth 1 https://github.com/k-takata/minpac "vim/pack/minpac/opt/minpac"
-else
-	git -C "vim/pack/minpac/opt/minpac" pull
-fi
+# Install/update vim plugins.
+vim_plugins=(
+	'PeterRincker/vim-argumentative'
+	'Shougo/vimproc.vim'
+	'airblade/vim-gitgutter'
+	'bkad/CamelCaseMotion'
+	'easymotion/vim-easymotion'
+	'godlygeek/tabular'
+	'groenewege/vim-less'
+	'junegunn/fzf.vim'
+	'junegunn/vim-easy-align'
+	'morhetz/gruvbox'
+	'mg979/vim-visual-multi'
+	'tpope/vim-commentary'
+	'tpope/vim-fugitive'
+	'tpope/vim-repeat'
+	'tpope/vim-sleuth'
+	'tpope/vim-speeddating'
+	'tpope/vim-surround'
+	'vim-scripts/Rename2'
+	'vim-scripts/The-NERD-tree'
+	'vim-scripts/VisIncr'
+	'vim-scripts/vis'
+	# File type / language support:
+	'vim-scripts/JSON.vim'
+	'vim-scripts/django.vim'
+	'vim-scripts/glsl.vim'
+	'vim-scripts/jade.vim'
+	'vim-scripts/openscad.vim'
+	'vim-pandoc/vim-pandoc-syntax'
+	'cespare/vim-toml'
+	'de-vri-es/vim-urscript'
+	'eagletmt/neco-ghc'
+	'guns/xterm-color-table.vim'
+	'leafgarland/typescript-vim'
+	'lukerandall/haskellmode-vim'
+	'rust-lang/rust.vim'
+)
+(
+	cd "vim/pack/config/start"
+	# Clone or update plugins.
+	for plugin in "${vim_plugins[@]}"; do
+		plugin_dir="${plugin##*/}"
+		if [[ -d "$plugin_dir" ]]; then
+			printf "Updating vim plugin %s\n" "$plugin"
+			git -C "$plugin_dir" fetch -q
+			git -C "$plugin_dir" reset -q --hard origin/HEAD
+		else
+			printf "Cloning vim plugin %s\n" "$plugin"
+			git clone -q "https://github.com/$plugin"
+		fi
+	done
 
-if [[ "$INSTALL_VIM_PLUGINS" != "no" ]]; then
-	vim -c "autocmd vimenter * echo 'Cleaning vim plugins.' | PackClean | echo 'Installing vim plugins.' | call minpac#update('', {'do': 'qall'})"
-fi
+	# Remove plugins that are not in the list (anymore).
+	for dir in *; do
+		[[ ! -d "$dir" ]] && continue;
+		delete=1
+		for plugin in "${vim_plugins[@]}"; do
+			plugin_dir="${plugin##*/}"
+			if [[ "$dir" == "$plugin_dir" ]]; then
+				delete=0;
+				break;
+			fi
+		done
+		if (( delete )); then
+			printf "Removing vim plugin %s\n" "$dir"
+			rm -rf "$dir"
+		fi
+	done
+)
 
 # Install zsh-syntax-highlighting.
 if [ ! -d "zsh-syntax-highlighting" ]; then
