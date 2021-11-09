@@ -92,6 +92,19 @@ do
 	install_file "$file" ".$file"
 done
 
+clone_or_update_vim_plugin() {
+	plugin="$1"
+	plugin_dir="${plugin##*/}"
+	if [[ -d "$plugin_dir" ]]; then
+		printf "Updating vim plugin %s\n" "$plugin"
+		git -C "$plugin_dir" fetch -q
+		git -C "$plugin_dir" reset -q --hard origin/HEAD
+	else
+		printf "Cloning vim plugin %s\n" "$plugin"
+		git clone -q "https://github.com/$plugin"
+	fi
+}
+
 # Install/update vim plugins.
 vim_plugins=(
 	'PeterRincker/vim-argumentative'
@@ -134,16 +147,11 @@ vim_plugins=(
 	cd "vim/pack/config/start"
 	# Clone or update plugins.
 	for plugin in "${vim_plugins[@]}"; do
-		plugin_dir="${plugin##*/}"
-		if [[ -d "$plugin_dir" ]]; then
-			printf "Updating vim plugin %s\n" "$plugin"
-			git -C "$plugin_dir" fetch -q
-			git -C "$plugin_dir" reset -q --hard origin/HEAD
-		else
-			printf "Cloning vim plugin %s\n" "$plugin"
-			git clone -q "https://github.com/$plugin"
-		fi
+		clone_or_update_vim_plugin "$plugin" &
 	done
+
+	wait
+	echo "All vim plugins up-to-date"
 
 	# Remove plugins that are not in the list (anymore).
 	for dir in *; do
